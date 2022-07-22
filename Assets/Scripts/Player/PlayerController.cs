@@ -29,7 +29,7 @@ namespace Together.Actors
         public Character m_InactiveCharacter => ActiveCharacter ? Player : Shadow;
         #endregion
 
-        private bool ActiveCharacter = false; // Decides which actor is currently being controlled
+        public bool ActiveCharacter { get; private set; } = false; // Decides which actor is currently being controlled
         private bool Multiplayer = false; // Use this when we implement multiplayer to disable the desaturation effect
 
         [SerializeField] private Character Player, Shadow;
@@ -89,12 +89,32 @@ namespace Together.Actors
             }
         }
 
+        public void SynchronizePlayerLocations()
+        {
+            InactivePlayer.transform.position = new Vector3(ActivePlayer.transform.position.x, -ActivePlayer.transform.position.y, InactivePlayer.transform.position.z);
+            InactivePlayer.velocity = new Vector2(ActivePlayer.velocity.x, -ActivePlayer.velocity.y);
+        }
+
         private void Update()
         {
+            #region DebugBindings
             if (Input.GetKeyDown(KeyCode.Y)) // Placeholder, Y obviously shouldn't be used as it's miles out of the road
             {
                 ActiveCharacter = !ActiveCharacter;
             }
+
+            if (!Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.U)) // Placeholder, this just allows me to syncronize the player
+            {
+                SynchronizePlayerLocations();
+            }    
+
+            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.U)) // Placeholder, this allows to toggle "InSync" on the PlayerController
+            {
+                SynchronizePlayerLocations();
+
+                InSync = !InSync;
+            }
+            #endregion
 
             int RemainingJumps = 0;
 
