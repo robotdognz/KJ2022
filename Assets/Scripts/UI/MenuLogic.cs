@@ -27,5 +27,8 @@ public class MenuLogic : MonoBehaviour
     public void ResumeGame()
     {
         Time.timeScale = 1;
+        Destroy(gameObject);
     }
+
+
 }
