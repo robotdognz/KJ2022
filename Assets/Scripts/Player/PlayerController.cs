@@ -11,6 +11,18 @@ namespace Together.Actors
         public int JumpCount;
         public bool InverseCharacter = false;
         public bool IsInLight = false;
+        public GameObject GrabbedObject
+        {
+            get
+            {
+                if (PickupPos.childCount > 0)
+                    return PickupPos.GetChild(0).gameObject;
+
+                return null;
+            }
+        }
+        public Transform PickupPos;
+        public bool GrabbedObjectThisFrame = false;
     }
 
     public class PlayerController : MonoBehaviour
@@ -57,6 +69,7 @@ namespace Together.Actors
         [Space]
         [SerializeField] private float SwitchAnimationSpeed = 2; // How fast the switch animation is. 1 will make the switch take 1 second, 2 will make it take half a second. 3, a third, so on so forth
         public bool InSync = true;
+        [SerializeField] private Vector2 DropObjectForce = new Vector2(10, 150);
 
         // Check if player is grounded and return true
         private bool IsGrounded
@@ -87,14 +100,53 @@ namespace Together.Actors
             Shadow.StartPosition = Shadow.CharacterObject.transform.position;
         }
 
-        private void MoveCharacter(Character Character, string HorizontalInput, string VerticalInput, string JumpInput)
+        public void PickupObject(Character Char, Transform Obj)
+        {
+            if (Char.GrabbedObject == null)
+            {
+                if (Obj.GetComponent<Rigidbody2D>())
+                    Obj.GetComponent<Rigidbody2D>().simulated = false;
+
+                Obj.transform.parent = Char.PickupPos;
+                Obj.transform.localPosition = Vector3.zero;
+
+                Char.GrabbedObjectThisFrame = true;
+            }
+        }
+
+        public void DropObject(Character Char)
+        {
+            if (Char.GrabbedObject && !Char.GrabbedObjectThisFrame)
+            {
+                if (Char.GrabbedObject.GetComponent<Rigidbody2D>())
+                    Char.GrabbedObject.GetComponent<Rigidbody2D>().simulated = true;
+
+                Transform GrabbedObject = Char.GrabbedObject.transform;
+                GrabbedObject.parent = null;
+
+                if (GrabbedObject.GetComponent<Rigidbody2D>())
+                    GrabbedObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(DropObjectForce.x * (Char.CharacterObject.GetComponent<SpriteRenderer>().flipX ? -1 : 1), DropObjectForce.y));
+            }
+        }
+
+        private void MoveCharacter(Character Character, string HorizontalInput, string VerticalInput, string JumpInput, string GrabInput)
         {
             float TargetSpeed = Input.GetAxisRaw(HorizontalInput) * PlayerSpeed;
 
             Character.CharacterObject.velocity = new Vector2(TargetSpeed, Character.CharacterObject.velocity.y);
 
+            if (Character.CharacterObject.velocity.x > 0)
+                Character.CharacterObject.GetComponent<SpriteRenderer>().flipX = false;
+            else if (Character.CharacterObject.velocity.x < 0)
+                Character.CharacterObject.GetComponent<SpriteRenderer>().flipX = true;
+
             if (IsGrounded)
                 Character.JumpCount = JumpCount;
+
+            if (Input.GetButtonDown(GrabInput) && Character.GrabbedObject != null)
+            {
+                DropObject(Character);
+            }
 
             if (Input.GetButtonDown(JumpInput))
             {
@@ -107,6 +159,8 @@ namespace Together.Actors
 
                 }
             }
+
+            Character.GrabbedObjectThisFrame = false;
         }
 
         public void SynchronizePlayerLocations()
@@ -170,7 +224,7 @@ namespace Together.Actors
 
             if (!InSync)
             { 
-                MoveCharacter(m_ActiveCharacter, "Horizontal", "Vertical", "Jump");
+                MoveCharacter(m_ActiveCharacter, "Horizontal", "Vertical", "Jump", "Grab");
 
                 if (ActiveCharacter)
                     Player2Jumps = RemainingJumps;
@@ -197,8 +251,8 @@ namespace Together.Actors
             }
             else
             {
-                MoveCharacter(Player, "Horizontal", "Vertical", "Jump");
-                MoveCharacter(Shadow, "Horizontal", "Vertical", "Jump");
+                MoveCharacter(Player, "Horizontal", "Vertical", "Jump", "Grab");
+                MoveCharacter(Shadow, "Horizontal", "Vertical", "Jump", "Grab");
 
                 Shadow.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Shadow.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 1, Time.deltaTime * SwitchAnimationSpeed));
                 Player.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Player.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 1, Time.deltaTime * SwitchAnimationSpeed));
