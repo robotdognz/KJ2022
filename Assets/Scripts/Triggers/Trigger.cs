@@ -4,6 +4,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Collider2D))]
 public class Trigger : MonoBehaviour
 {
+    public bool IgnorePlayer = true;
     public UnityEvent TriggerEnter;
     public UnityAction<Collider2D> TriggerEnterCol = new UnityAction<Collider2D>((Collider2D C) => { });
     public UnityEvent TriggerStay;
@@ -14,7 +15,7 @@ public class Trigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Player") return;
+        if (collision.tag == "Player" && IgnorePlayer) return;
         if (collision.tag != "Trigger")
         {
             TriggerState = true;
@@ -25,7 +26,7 @@ public class Trigger : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.tag == "Player") return;
+        if (collision.tag == "Player" && IgnorePlayer) return;
         if (collision.tag != "Trigger")
         {
             TriggerStay.Invoke();
@@ -35,7 +36,7 @@ public class Trigger : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.tag == "Player") return;
+        if (collision.tag == "Player" && IgnorePlayer) return;
         if (collision.tag != "Trigger")
         {
             TriggerState = false;
