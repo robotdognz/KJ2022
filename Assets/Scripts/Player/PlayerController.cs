@@ -9,6 +9,7 @@ namespace Together.Actors
         public Rigidbody2D CharacterObject;
         public int JumpCount;
         public bool InverseCharacter = false;
+        public bool IsInLight = false;
     }
 
     public class PlayerController : MonoBehaviour
@@ -18,6 +19,21 @@ namespace Together.Actors
         public static Vector2 ActivePlayerVelocity => Instance.m_ActivePlayerVelocity;
         public static Rigidbody2D ActivePlayer => Instance.m_ActivePlayer;
         public static Rigidbody2D InactivePlayer => Instance.m_InactivePlayer;
+
+        public static Character GetCharacterByCollider(Collider2D Collider)
+        {
+            Rigidbody2D RB2D;
+
+            if (RB2D = Collider.GetComponent<Rigidbody2D>())
+            {
+                if (RB2D == Instance.Player.CharacterObject)
+                    return Instance.Player;
+                else if (RB2D == Instance.Shadow.CharacterObject)
+                    return Instance.Shadow;
+            }
+
+            return null;
+        }
         #endregion
 
         #region Non-Static Hooks
