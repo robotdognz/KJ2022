@@ -10,39 +10,100 @@ public class Lever : Activate
         OnOff
     }
 
+    private enum LeverState
+    {
+        Left,
+        Right,
+        None
+    }
+
     [Tooltip("Constant will always trigger OnActivate, OnOff will will switch between triggering OnActivate and OnDeactivate")]
     public LeverType leverType;
 
-    Trigger trigger;
+    private LeverState currentLeverState = LeverState.None;
+    private LeverState activateLeverState = LeverState.None;
 
-    protected bool activate = true;
+    [SerializeField] Trigger leftTrigger;
+    [SerializeField] Trigger rightTrigger;
 
     void Start()
-    {
-        trigger = GetComponentInChildren<Trigger>();
-        trigger.TriggerEnter.AddListener(Triggered);
-    }
-
-    void Triggered()
     {
         switch (leverType)
         {
             case LeverType.Constant:
-                DoActivate();
+                leftTrigger.TriggerEnter.AddListener(Left);
+                rightTrigger.TriggerEnter.AddListener(Right);
                 break;
             case LeverType.OnOff:
-                if (activate)
+                leftTrigger.TriggerEnter.AddListener(Left);
+                rightTrigger.TriggerEnter.AddListener(Right);
+                break;
+        }
+
+    }
+
+    void Left()
+    {
+        switch (currentLeverState)
+        {
+            case LeverState.None:
+                currentLeverState = LeverState.Left;
+                activateLeverState = currentLeverState;
+                DoActivate();
+                break;
+            case LeverState.Right:
+                currentLeverState = LeverState.Left;
+                switch (leverType)
                 {
-                    DoActivate();
-                    activate = false;
-                }
-                else
-                {
-                    DoDeactivate();
-                    activate = true;
+                    case LeverType.Constant:
+                        DoActivate();
+                        break;
+                    case LeverType.OnOff:
+                        if (currentLeverState == activateLeverState)
+                        {
+                            DoActivate();
+                        }
+                        else
+                        {
+                            DoDeactivate();
+                        }
+                        break;
                 }
                 break;
         }
+    }
+
+    void Right()
+    {
+        switch (currentLeverState)
+        {
+            case LeverState.None:
+                currentLeverState = LeverState.Right;
+                activateLeverState = currentLeverState;
+                DoActivate();
+                break;
+            case LeverState.Left:
+                currentLeverState = LeverState.Right;
+                switch (leverType)
+                {
+                    case LeverType.Constant:
+                        DoActivate();
+                        break;
+                    case LeverType.OnOff:
+                        if (currentLeverState == activateLeverState)
+                        {
+                            DoActivate();
+                        }
+                        else
+                        {
+                            DoDeactivate();
+                        }
+                        break;
+                }
+                break;
+        }
+
+
     }
 
 }
