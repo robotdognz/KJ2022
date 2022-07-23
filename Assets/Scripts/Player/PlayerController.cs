@@ -99,18 +99,9 @@ namespace Together.Actors
         [SerializeField] public Animator SplitSreenUI;
 
         // Check if player is grounded and return true
-        private bool IsGrounded
-        {
-            get
-            {
-                if (ActivePlayer.GetComponentInChildren<Trigger>().TriggerState)
-                {
-                    return true;
-                }
+        private bool IsGrounded() => ActivePlayer.GetComponentInChildren<Trigger>().TriggerState;
 
-                return false;
-            }
-        }
+        public bool IsGrounded(Character Char) => Char.CharacterObject.GetComponentInChildren<Trigger>().TriggerState;
 
         private void Awake()
         {
@@ -183,7 +174,7 @@ namespace Together.Actors
             else if (Character.CharacterObject.velocity.x < 0)
                 Character.CharacterObject.GetComponent<SpriteRenderer>().flipX = true;
 
-            if (IsGrounded)
+            if (IsGrounded(Character))
                 Character.JumpCount = JumpCount;
 
             if (Input.GetButtonDown(GrabInput) && Character.GrabbedObject != null)
@@ -191,6 +182,8 @@ namespace Together.Actors
                 DropObject(Character);
                 DidMovementInput = true;
             }
+
+            bool JumpBtn = false;
 
             if (Input.GetButtonDown(JumpInput))
             {
@@ -200,6 +193,7 @@ namespace Together.Actors
                     Character.CharacterObject.AddForce(new Vector2(0, Character.InverseCharacter ? -JumpForce : JumpForce));
                     // ActivePlayer.GetComponentInChildren<Trigger>().TriggerState = false;
                     Character.JumpCount--;
+                    JumpBtn = true;
                 }
 
                 DidMovementInput = true;
@@ -221,6 +215,15 @@ namespace Together.Actors
             else if (DidMovementInput && Character.IsWaitingForSplit)
             {
                 Character.CurrentWait = Character.WaitTime;
+            }
+
+            Animator Anim;
+            if (Anim = Character.CharacterObject.GetComponent<Animator>())
+            {
+                Anim.SetBool("Moving", Character.CharacterObject.velocity.x != 0);
+                Anim.SetBool("Grounded", IsGrounded(Character));
+                if (JumpBtn)
+                    Anim.SetTrigger("Jump");
             }
 
             Character.GrabbedObjectThisFrame = false;
@@ -260,6 +263,9 @@ namespace Together.Actors
 
             if (Shadow.CharacterObject.gameObject.activeSelf)
             {
+                ActivePlayer.GetComponent<Animator>().speed = 1;
+                InactivePlayer.GetComponent<Animator>().speed = 0;
+
                 if (Input.GetKeyDown(KeyCode.Tab))
                 {
                     ActiveCharacter = !ActiveCharacter;
@@ -284,12 +290,10 @@ namespace Together.Actors
                             Shadow.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Shadow.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 0, Time.deltaTime * SwitchAnimationSpeed));
                         else
                             Shadow.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Shadow.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 1, Time.deltaTime * SwitchAnimationSpeed));
-
-                        if (!ActiveCharacter)
-                            Player.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Player.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 1, Time.deltaTime * SwitchAnimationSpeed));
-                        else
-                            Player.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Player.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 0, Time.deltaTime * SwitchAnimationSpeed));
                     }
+                    else
+                        Shadow.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Shadow.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 1, Time.deltaTime * SwitchAnimationSpeed));
+
                     #endregion
                 }
                 else
@@ -298,8 +302,7 @@ namespace Together.Actors
                     MoveCharacter(Shadow, "Horizontal", "Vertical", "Jump", "Grab");
 
                     Shadow.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Shadow.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 1, Time.deltaTime * SwitchAnimationSpeed));
-                    Player.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Player.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 1, Time.deltaTime * SwitchAnimationSpeed));
-
+                    
                     Shadow.CharacterObject.constraints = RigidbodyConstraints2D.FreezeRotation;
                     Player.CharacterObject.constraints = RigidbodyConstraints2D.FreezeRotation;
                 }
@@ -330,8 +333,8 @@ namespace Together.Actors
             }
             else
             {
-                MoveCharacter(Player, "Horizontal", "Vertical", "Jump", "Grab"); 
-                Player.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Player.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 1, Time.deltaTime * SwitchAnimationSpeed));
+                Player.CharacterObject.GetComponent<Animator>().speed = 1;
+                MoveCharacter(Player, "Horizontal", "Vertical", "Jump", "Grab");
             }
         }
     }
