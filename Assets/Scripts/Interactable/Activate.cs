@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public class Activate : MonoBehaviour
 {
+    public bool IsOn;
     public UnityEvent OnActivate;
     public UnityEvent OnDeactivate;
 

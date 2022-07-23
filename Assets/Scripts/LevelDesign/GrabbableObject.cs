@@ -18,7 +18,8 @@ public class GrabbableObject : MonoBehaviour
         {
             if (Input.GetButtonDown("Grab"))
             {
-                PlayerController.Instance.PickupObject(PlayerController.Instance.m_ActiveCharacter, transform);
+                if (Collision.gameObject.layer == gameObject.layer)
+                    PlayerController.Instance.PickupObject(PlayerController.Instance.m_ActiveCharacter, transform);
             }
         }
     }

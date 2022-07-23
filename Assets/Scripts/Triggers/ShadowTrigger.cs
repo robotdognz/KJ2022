@@ -10,6 +10,7 @@ namespace Together.Levels
         public int CasterAmount;
         public float ShadowDistance = 10;
         public string TargetTag;
+        public bool DisableRaycastGizmos = false;
 
         private List<List<Vector2>> HitPositions
         {
@@ -85,11 +86,14 @@ namespace Together.Levels
         {
             foreach (List<Vector2> Point in HitPositions)
             {
-                Gizmos.color = Color.red;
-                Draw2DRay(Point[0], Point[1]);
+                if (!DisableRaycastGizmos)
+                {
+                    Gizmos.color = Color.red;
+                    Draw2DRay(Point[0], Point[1]);
+                }
 
                 Gizmos.color = Color.yellow;
-                Gizmos.DrawWireSphere(transform.position, ShadowDistance);
+                Gizmos.DrawWireSphere(Point[0], ShadowDistance);
             }
         }
 

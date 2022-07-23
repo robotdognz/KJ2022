@@ -14,21 +14,30 @@ public class Trigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        TriggerState = true;
-        TriggerEnter.Invoke();
-        TriggerEnterCol.Invoke(collision);
+        if (collision.tag != "Trigger")
+        {
+            TriggerState = true;
+            TriggerEnter.Invoke();
+            TriggerEnterCol.Invoke(collision);
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        TriggerStay.Invoke();
-        TriggerStayCol.Invoke(collision);
+        if (collision.tag != "Trigger")
+        {
+            TriggerStay.Invoke();
+            TriggerStayCol.Invoke(collision);
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
-    {
-        TriggerState = false;
-        TriggerExit.Invoke();
-        TriggerExitCol.Invoke(collision);
+        {
+        if (collision.tag != "Trigger")
+        {
+            TriggerState = false;
+            TriggerExit.Invoke();
+            TriggerExitCol.Invoke(collision);
+        }
     }
 }

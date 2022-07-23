@@ -11,6 +11,22 @@ namespace Together.Actors
         public int JumpCount;
         public bool InverseCharacter = false;
         public bool IsInLight = false;
+        public Material Renderer;
+        public float ShadowDeathTime = 3;
+        private float m_ShadowDeathTimer;
+        public float ShadowDeathTimer
+        {
+            get
+            {
+                return m_ShadowDeathTimer;
+            }
+            set
+            {
+                Renderer.SetFloat("_DeathVignetteOpacity", Mathf.Lerp(1, 0, value));
+                m_ShadowDeathTimer = value;
+            }
+        }
+
         public GameObject GrabbedObject
         {
             get
@@ -76,7 +92,7 @@ namespace Together.Actors
         {
             get
             {
-                if (ActivePlayerVelocity.y == 0 && ActivePlayer.GetComponentInChildren<Trigger>().TriggerState) 
+                if (ActivePlayerVelocity.y == 0 && ActivePlayer.GetComponentInChildren<Trigger>().TriggerState)
                 {
                     return true;
                 }
@@ -95,6 +111,9 @@ namespace Together.Actors
             Instance = this;
             // Player.CharacterObject.gravityScale = 1;
             // Shadow.CharacterObject.gravityScale = -1;
+
+            Player.ShadowDeathTimer = 1;
+            Shadow.ShadowDeathTimer = 1;
 
             Player.StartPosition = Player.CharacterObject.transform.position;
             Shadow.StartPosition = Shadow.CharacterObject.transform.position;
@@ -199,7 +218,7 @@ namespace Together.Actors
             if (!Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.U)) // Placeholder, this just allows me to syncronize the player
             {
                 SynchronizePlayerLocations();
-            }    
+            }
 
             if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.U)) // Placeholder, this allows to toggle "InSync" on the PlayerController
             {
@@ -223,7 +242,7 @@ namespace Together.Actors
             int RemainingJumps = 0;
 
             if (!InSync)
-            { 
+            {
                 MoveCharacter(m_ActiveCharacter, "Horizontal", "Vertical", "Jump", "Grab");
 
                 if (ActiveCharacter)
@@ -260,6 +279,37 @@ namespace Together.Actors
                 Shadow.CharacterObject.constraints = RigidbodyConstraints2D.FreezeRotation;
                 Player.CharacterObject.constraints = RigidbodyConstraints2D.FreezeRotation;
             }
+
+            #region ShadowBehaviour
+            if (!m_ActiveCharacter.IsInLight)
+            {
+                m_ActiveCharacter.ShadowDeathTimer -= Time.deltaTime / m_ActiveCharacter.ShadowDeathTime;
+            }
+            else
+            {
+                m_ActiveCharacter.ShadowDeathTimer += Time.deltaTime / (m_ActiveCharacter.ShadowDeathTime * 2);
+            }
+
+            m_ActiveCharacter.ShadowDeathTimer = Mathf.Clamp01(m_ActiveCharacter.ShadowDeathTimer);
+
+            if (!m_InactiveCharacter.IsInLight)
+            {
+                m_InactiveCharacter.ShadowDeathTimer -= Time.deltaTime / m_InactiveCharacter.ShadowDeathTime;
+            }
+            else
+            {
+                m_InactiveCharacter.ShadowDeathTimer += Time.deltaTime / (m_InactiveCharacter.ShadowDeathTime / 2);
+            }
+
+            m_InactiveCharacter.ShadowDeathTimer = Mathf.Clamp01(m_InactiveCharacter.ShadowDeathTimer);
+
+            if (m_ActiveCharacter.ShadowDeathTimer <= 0 || m_InactiveCharacter.ShadowDeathTimer <= 0)
+            {
+                Player.ShadowDeathTimer = 1;
+                Shadow.ShadowDeathTimer = 1;
+                ResetPlayer(3); // Introduce harsher concequences later!!!
+            }
+            #endregion
         }
     }
 }

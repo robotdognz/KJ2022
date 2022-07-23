@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - ShadowCaster
+  - Trigger
   layers:
   - Default
   - TransparentFX
@@ -21,12 +22,12 @@ TagManager:
   - DarkWorld
   - PlayerTriggerLight
   - PlayerTriggerDark
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - DarkButton
+  - LightButton
+  - SharedButton
+  - DarkBox
+  - LightBox
+  - SharedBox
   - 
   - 
   - 

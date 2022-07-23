@@ -11,10 +11,9 @@ GameObject:
   - component: {fileID: 3835604751855699692}
   - component: {fileID: 3835604751855699699}
   - component: {fileID: 3835604751855699693}
-  - component: {fileID: 3835604751855699694}
   m_Layer: 0
   m_Name: PointLight_15M
-  m_TagString: Untagged
+  m_TagString: ShadowCaster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -991,17 +990,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TargetSide: 0
   LightTransitionSpeed: 3
---- !u!114 &3835604751855699694
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3835604751855699698}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e0079a79a4e14e46a1a0ebbb0204f8c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CasterAmount: 200
-  ShadowDistance: 15

@@ -24,6 +24,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _GhostImage:
+        m_Texture: {fileID: 8400000, guid: d0e89381d26e2e34388591f194e380d5, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -34,6 +38,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Vignette:
+        m_Texture: {fileID: 2800000, guid: 387b024c976814b4bab5f1318c85aa5e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -52,16 +60,19 @@ Material:
     m_Floats:
     - _DarkWorld: 1
     - _DarkWorldAnimationSpeed: 0.1
-    - _DarkWorldSaturation: 0.2
-    - _DarkworldContrast: 5
+    - _DarkWorldSaturation: 0.25
+    - _DarkworldContrast: 1
+    - _DeathVignetteOpacity: 0
     - _EnableExternalAlpha: 0
+    - _GhostImageOpacity: 0
     - _Opacity: 1
     - _WarbleIntensity: 0.01
     - _WarbleScale: 5
     - _WorbleScale: 5
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DarkWorldTint: {r: 0.46226418, g: 0.46226418, b: 0.46226418, a: 1}
+    - _DarkWorldTint: {r: 0.20754719, g: 0.20754719, b: 0.20754719, a: 1}
+    - _DeathvignetteColour: {r: 0.7075472, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

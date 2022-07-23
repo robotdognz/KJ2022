@@ -24,6 +24,7 @@ public class Button : Activate
     private IEnumerator EnterEnum()
     {
         isEntering = true;
+        IsOn = true;
         DoActivate();
         yield return new WaitForSeconds(0.2f);
         isEntering = false;
@@ -37,6 +38,7 @@ public class Button : Activate
     private IEnumerator ExitEnum()
     {
         isExiting = true;
+        IsOn = false;
         DoDeactivate();
         yield return new WaitForSeconds(0.2f);
         isExiting = false;
