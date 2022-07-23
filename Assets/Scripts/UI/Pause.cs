@@ -16,4 +16,9 @@ public class Pause : MonoBehaviour
             theMenu.GetComponent<MenuLogic>().PauseGame();
         }
     }
+
+    public void Test()
+    {
+        Debug.Log("Test");
+    }
 }
