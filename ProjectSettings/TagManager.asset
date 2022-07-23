@@ -12,15 +12,15 @@ TagManager:
   - 
   - Water
   - UI
-  - PlayerTrigger
+  - 
   - Interactable
   - 
   - 
   - SharedWorld
   - LightWorld
   - DarkWorld
-  - 
-  - 
+  - PlayerTriggerLight
+  - PlayerTriggerDark
   - 
   - 
   - 
