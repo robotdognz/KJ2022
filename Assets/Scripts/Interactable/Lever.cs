@@ -21,7 +21,7 @@ public class Lever : Activate
     public LeverType leverType;
 
     private LeverState currentLeverState = LeverState.None;
-    private LeverState activateLeverState = LeverState.None;
+    [SerializeField] private LeverState activateLeverState = LeverState.None;
 
     [SerializeField] Trigger leftTrigger;
     [SerializeField] Trigger rightTrigger;

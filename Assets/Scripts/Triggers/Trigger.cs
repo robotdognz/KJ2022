@@ -14,6 +14,7 @@ public class Trigger : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.tag == "Player") return;
         if (collision.tag != "Trigger")
         {
             TriggerState = true;
@@ -24,6 +25,7 @@ public class Trigger : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
+        if (collision.tag == "Player") return;
         if (collision.tag != "Trigger")
         {
             TriggerStay.Invoke();
@@ -32,7 +34,8 @@ public class Trigger : MonoBehaviour
     }
 
     private void OnTriggerExit2D(Collider2D collision)
-        {
+    {
+        if (collision.tag == "Player") return;
         if (collision.tag != "Trigger")
         {
             TriggerState = false;
