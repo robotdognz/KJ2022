@@ -80,8 +80,8 @@ namespace Together.Actors
         private void Awake()
         {
             Instance = this;
-            Player.CharacterObject.gravityScale = 1;
-            Shadow.CharacterObject.gravityScale = -1;
+            // Player.CharacterObject.gravityScale = 1;
+            // Shadow.CharacterObject.gravityScale = -1;
 
             Player.StartPosition = Player.CharacterObject.transform.position;
             Shadow.StartPosition = Shadow.CharacterObject.transform.position;
