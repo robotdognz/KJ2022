@@ -6,15 +6,20 @@ namespace Together.Actors
 {
     public class CameraController : MonoBehaviour
     {
-        public Transform Target;
+        public Transform Player, PlayerCamera;
+        public Transform Shadow, ShadowCamera;
         public float MoveSpeed = 7.5f;
 
         private void Update()
         {
-            Target = PlayerController.ActivePlayer.transform;
+            Player = PlayerController.Instance.Player.CharacterObject.transform;
+            Shadow = PlayerController.Instance.Shadow.CharacterObject.transform;
 
-            transform.position = Vector3.MoveTowards(transform.position, Target.position, MoveSpeed * Time.deltaTime);
-            transform.position = new Vector3(transform.position.x, transform.position.y, -10);
+            PlayerCamera.position = Vector3.MoveTowards(PlayerCamera.position, Player.position, MoveSpeed * Time.deltaTime);
+            ShadowCamera.position = Vector3.MoveTowards(ShadowCamera.position, Shadow.position, MoveSpeed * Time.deltaTime);
+
+            PlayerCamera.position = new Vector3(PlayerCamera.position.x, PlayerCamera.position.y, -10);
+            ShadowCamera.position = new Vector3(ShadowCamera.position.x, ShadowCamera.position.y, -10);
         }
     }
 }

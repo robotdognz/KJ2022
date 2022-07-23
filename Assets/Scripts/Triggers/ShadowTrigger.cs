@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
@@ -11,6 +12,7 @@ namespace Together.Levels
         public float ShadowDistance = 10;
         public string TargetTag;
         public bool DisableRaycastGizmos = false;
+        public LayerMask ShadowRecievers;
 
         private List<List<Vector2>> HitPositions
         {
@@ -33,7 +35,7 @@ namespace Together.Levels
                         Vector2 ShortestPoint = Vector2.zero;
                         RaycastHit2D ShortestHit = new RaycastHit2D();
 
-                        foreach (RaycastHit2D Hit in Physics2D.RaycastAll(Trans.position, Direction, ShadowDistance))
+                        foreach (RaycastHit2D Hit in Physics2D.RaycastAll(Trans.position, Direction, ShadowDistance, ShadowRecievers))
                         {
                             if ((Hit.collider.GetComponent<ShadowCaster2D>() && Hit.collider.GetComponent<ShadowCaster2D>().castsShadows && Hit.collider.GetComponent<ShadowCaster2D>().enabled) || Hit.collider.tag == "Player")
                             {
@@ -97,13 +99,12 @@ namespace Together.Levels
             }
         }
 
-        private void OnDrawGizmosSelected()
-        {
-        }
-
         private void Update()
         {
-            List<List<Vector2>> Points = HitPositions;
+            Parallel.Invoke(() =>
+            {
+                List<List<Vector2>> Points = HitPositions;
+            });
         }
     }
 }

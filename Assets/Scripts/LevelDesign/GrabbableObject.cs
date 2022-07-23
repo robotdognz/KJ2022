@@ -18,7 +18,7 @@ public class GrabbableObject : MonoBehaviour
         {
             if (Input.GetButtonDown("Grab"))
             {
-                if (Collision.gameObject.layer == gameObject.layer)
+                if (Collision.gameObject.layer == gameObject.layer || LayerMask.LayerToName(gameObject.layer).ToLower().Contains("shared"))
                     PlayerController.Instance.PickupObject(PlayerController.Instance.m_ActiveCharacter, transform);
             }
         }

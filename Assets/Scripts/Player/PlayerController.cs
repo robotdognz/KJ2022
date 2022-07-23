@@ -14,6 +14,12 @@ namespace Together.Actors
         public Material Renderer;
         public float ShadowDeathTime = 3;
         private float m_ShadowDeathTimer;
+        public float MovespeedMultiplier = 1;
+
+        public bool IsWaitingForSplit;
+        public float WaitTime;
+        public float CurrentWait;
+
         public float ShadowDeathTimer
         {
             get
@@ -77,7 +83,7 @@ namespace Together.Actors
         public bool ActiveCharacter { get; private set; } = false; // Decides which actor is currently being controlled
         private bool Multiplayer = false; // Use this when we implement multiplayer to disable the desaturation effect
 
-        [SerializeField] private Character Player, Shadow;
+        public Character Player, Shadow;
         private int Player1Jumps, Player2Jumps; // Scuffed? Yes but this will tell the game how many times a given player has jumped. Prevents a potential bug wher ea player could jump infinitely if they switch quick enough
         [SerializeField] private float PlayerSpeed = 5;
         [SerializeField] private float JumpForce = 250;
@@ -86,13 +92,17 @@ namespace Together.Actors
         [SerializeField] private float SwitchAnimationSpeed = 2; // How fast the switch animation is. 1 will make the switch take 1 second, 2 will make it take half a second. 3, a third, so on so forth
         public bool InSync = true;
         [SerializeField] private Vector2 DropObjectForce = new Vector2(10, 150);
+        [Space]
+        public GameObject SharedLayerRef;
+        public GameObject LightLayerRef;
+        public GameObject DarkLayerRef;
 
         // Check if player is grounded and return true
         private bool IsGrounded
         {
             get
             {
-                if (ActivePlayerVelocity.y == 0 && ActivePlayer.GetComponentInChildren<Trigger>().TriggerState)
+                if (ActivePlayer.GetComponentInChildren<Trigger>().TriggerState)
                 {
                     return true;
                 }
@@ -101,22 +111,31 @@ namespace Together.Actors
             }
         }
 
-        private void OnGUI()
-        {
-            GUILayout.Label(new GUIContent($"\"Player\".JumpCount > {Player.JumpCount}\n\"Shadow\".JumpCount > {Shadow.JumpCount}"));
-        }
-
         private void Awake()
         {
             Instance = this;
-            // Player.CharacterObject.gravityScale = 1;
-            // Shadow.CharacterObject.gravityScale = -1;
 
             Player.ShadowDeathTimer = 1;
             Shadow.ShadowDeathTimer = 1;
 
             Player.StartPosition = Player.CharacterObject.transform.position;
             Shadow.StartPosition = Shadow.CharacterObject.transform.position;
+
+            Shadow.CharacterObject.gameObject.SetActive(false);
+        }
+
+        public void SplitPlayer(Collider2D Collider)
+        {
+            bool WasPlayerUnsplit = false;
+
+            if (Shadow.CharacterObject.gameObject.activeSelf == false)
+            {
+                Shadow.CharacterObject.transform.position = Player.CharacterObject.transform.position;
+                Shadow.CharacterObject.velocity = Player.CharacterObject.velocity;
+                WasPlayerUnsplit = true;
+            }
+
+            Shadow.CharacterObject.gameObject.SetActive(true);
         }
 
         public void PickupObject(Character Char, Transform Obj)
@@ -152,7 +171,9 @@ namespace Together.Actors
         {
             float TargetSpeed = Input.GetAxisRaw(HorizontalInput) * PlayerSpeed;
 
-            Character.CharacterObject.velocity = new Vector2(TargetSpeed, Character.CharacterObject.velocity.y);
+            bool DidMovementInput = false;
+
+            Character.CharacterObject.velocity = new Vector2(TargetSpeed * Character.MovespeedMultiplier, Character.CharacterObject.velocity.y);
 
             if (Character.CharacterObject.velocity.x > 0)
                 Character.CharacterObject.GetComponent<SpriteRenderer>().flipX = false;
@@ -165,6 +186,7 @@ namespace Together.Actors
             if (Input.GetButtonDown(GrabInput) && Character.GrabbedObject != null)
             {
                 DropObject(Character);
+                DidMovementInput = true;
             }
 
             if (Input.GetButtonDown(JumpInput))
@@ -175,8 +197,27 @@ namespace Together.Actors
                     Character.CharacterObject.AddForce(new Vector2(0, Character.InverseCharacter ? -JumpForce : JumpForce));
                     ActivePlayer.GetComponentInChildren<Trigger>().TriggerState = false;
                     Character.JumpCount--;
-
                 }
+
+                DidMovementInput = true;
+            }
+
+            if (Character.CharacterObject.velocity.x != 0)
+                DidMovementInput = true;
+
+            if (Character.IsWaitingForSplit && !DidMovementInput)
+            {
+                Character.CurrentWait -= Time.deltaTime;
+
+                if (Character.CurrentWait <= 0)
+                {
+                    SplitPlayer(Character.CharacterObject.GetComponent<Collider2D>());
+                    Character.IsWaitingForSplit = false;
+                }
+            }
+            else if (DidMovementInput && Character.IsWaitingForSplit)
+            {
+                Character.CurrentWait = Character.WaitTime;
             }
 
             Character.GrabbedObjectThisFrame = false;
@@ -209,107 +250,83 @@ namespace Together.Actors
 
         private void Update()
         {
-            #region DebugBindings
-            if (Input.GetKeyDown(KeyCode.Y)) // Placeholder, Y obviously shouldn't be used as it's miles out of the road
-            {
-                ActiveCharacter = !ActiveCharacter;
-            }
-
-            if (!Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.U)) // Placeholder, this just allows me to syncronize the player
-            {
-                SynchronizePlayerLocations();
-            }
-
-            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.U)) // Placeholder, this allows to toggle "InSync" on the PlayerController
-            {
-                SynchronizePlayerLocations();
-
-                InSync = !InSync;
-            }
-
-            if (Input.GetKey(KeyCode.R))
-            {
-                if (Input.GetKeyDown(KeyCode.Alpha1))
-                    ResetPlayer(0);
-                else if (Input.GetKeyDown(KeyCode.Alpha2))
-                    ResetPlayer(1);
-                else if (Input.GetKeyDown(KeyCode.Alpha3))
-                    ResetPlayer(2);
-            }
-
-            #endregion
-
             int RemainingJumps = 0;
 
-            if (!InSync)
+            if (Shadow.CharacterObject.gameObject.activeSelf)
             {
-                MoveCharacter(m_ActiveCharacter, "Horizontal", "Vertical", "Jump", "Grab");
-
-                if (ActiveCharacter)
-                    Player2Jumps = RemainingJumps;
-                else
-                    Player1Jumps = RemainingJumps;
-
-                ActivePlayer.constraints = RigidbodyConstraints2D.FreezeRotation;
-                InactivePlayer.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-
-                #region Desaturation. DON'T LOOK AT ME!!!
-                if (!Multiplayer)
+                if (Input.GetKeyDown(KeyCode.Tab))
                 {
-                    if (!ActiveCharacter)
-                        Shadow.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Shadow.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 0, Time.deltaTime * SwitchAnimationSpeed));
-                    else
-                        Shadow.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Shadow.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 1, Time.deltaTime * SwitchAnimationSpeed));
+                    ActiveCharacter = !ActiveCharacter;
+                }
 
-                    if (!ActiveCharacter)
-                        Player.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Player.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 1, Time.deltaTime * SwitchAnimationSpeed));
+                if (!InSync)
+                {
+                    MoveCharacter(m_ActiveCharacter, "Horizontal", "Vertical", "Jump", "Grab");
+
+                    if (ActiveCharacter)
+                        Player2Jumps = RemainingJumps;
                     else
-                        Player.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Player.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 0, Time.deltaTime * SwitchAnimationSpeed));
+                        Player1Jumps = RemainingJumps;
+
+                    ActivePlayer.constraints = RigidbodyConstraints2D.FreezeRotation;
+                    InactivePlayer.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+
+                    #region Desaturation. DON'T LOOK AT ME!!!
+                    if (!Multiplayer)
+                    {
+                        if (!ActiveCharacter)
+                            Shadow.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Shadow.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 0, Time.deltaTime * SwitchAnimationSpeed));
+                        else
+                            Shadow.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Shadow.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 1, Time.deltaTime * SwitchAnimationSpeed));
+
+                        if (!ActiveCharacter)
+                            Player.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Player.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 1, Time.deltaTime * SwitchAnimationSpeed));
+                        else
+                            Player.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Player.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 0, Time.deltaTime * SwitchAnimationSpeed));
+                    }
+                    #endregion
+                }
+                else
+                {
+                    MoveCharacter(Player, "Horizontal", "Vertical", "Jump", "Grab");
+                    MoveCharacter(Shadow, "Horizontal", "Vertical", "Jump", "Grab");
+
+                    Shadow.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Shadow.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 1, Time.deltaTime * SwitchAnimationSpeed));
+                    Player.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Player.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 1, Time.deltaTime * SwitchAnimationSpeed));
+
+                    Shadow.CharacterObject.constraints = RigidbodyConstraints2D.FreezeRotation;
+                    Player.CharacterObject.constraints = RigidbodyConstraints2D.FreezeRotation;
+                }
+
+                #region ShadowBehaviour
+                if (!Shadow.IsInLight)
+                {
+                    Shadow.CharacterObject.GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>().enabled = false;
+                    Shadow.MovespeedMultiplier = 0.3f;
+                    Shadow.ShadowDeathTimer -= Time.deltaTime / Shadow.ShadowDeathTime;
+                }
+                else
+                {
+                    Shadow.CharacterObject.GetComponentInChildren<UnityEngine.Rendering.Universal.Light2D>().enabled = true;
+                    Shadow.MovespeedMultiplier = 1;
+                    Shadow.ShadowDeathTimer += Time.deltaTime / (Shadow.ShadowDeathTime / 2);
+                }
+
+                Shadow.ShadowDeathTimer = Mathf.Clamp01(Shadow.ShadowDeathTimer);
+
+                if (Shadow.ShadowDeathTimer <= 0 || Shadow.ShadowDeathTimer <= 0)
+                {
+                    Shadow.ShadowDeathTimer = 1;
+                    Shadow.CharacterObject.transform.position = Player.CharacterObject.transform.position;
+                    Shadow.CharacterObject.velocity = Player.CharacterObject.velocity;
                 }
                 #endregion
             }
             else
             {
-                MoveCharacter(Player, "Horizontal", "Vertical", "Jump", "Grab");
-                MoveCharacter(Shadow, "Horizontal", "Vertical", "Jump", "Grab");
-
-                Shadow.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Shadow.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 1, Time.deltaTime * SwitchAnimationSpeed));
+                MoveCharacter(Player, "Horizontal", "Vertical", "Jump", "Grab"); 
                 Player.CharacterObject.GetComponent<Renderer>().material.SetFloat("_Saturation", Mathf.MoveTowards(Player.CharacterObject.GetComponent<Renderer>().material.GetFloat("_Saturation"), 1, Time.deltaTime * SwitchAnimationSpeed));
-
-                Shadow.CharacterObject.constraints = RigidbodyConstraints2D.FreezeRotation;
-                Player.CharacterObject.constraints = RigidbodyConstraints2D.FreezeRotation;
             }
-
-            #region ShadowBehaviour
-            if (!m_ActiveCharacter.IsInLight)
-            {
-                m_ActiveCharacter.ShadowDeathTimer -= Time.deltaTime / m_ActiveCharacter.ShadowDeathTime;
-            }
-            else
-            {
-                m_ActiveCharacter.ShadowDeathTimer += Time.deltaTime / (m_ActiveCharacter.ShadowDeathTime * 2);
-            }
-
-            m_ActiveCharacter.ShadowDeathTimer = Mathf.Clamp01(m_ActiveCharacter.ShadowDeathTimer);
-
-            if (!m_InactiveCharacter.IsInLight)
-            {
-                m_InactiveCharacter.ShadowDeathTimer -= Time.deltaTime / m_InactiveCharacter.ShadowDeathTime;
-            }
-            else
-            {
-                m_InactiveCharacter.ShadowDeathTimer += Time.deltaTime / (m_InactiveCharacter.ShadowDeathTime / 2);
-            }
-
-            m_InactiveCharacter.ShadowDeathTimer = Mathf.Clamp01(m_InactiveCharacter.ShadowDeathTimer);
-
-            if (m_ActiveCharacter.ShadowDeathTimer <= 0 || m_InactiveCharacter.ShadowDeathTimer <= 0)
-            {
-                Player.ShadowDeathTimer = 1;
-                Shadow.ShadowDeathTimer = 1;
-                ResetPlayer(3); // Introduce harsher concequences later!!!
-            }
-            #endregion
         }
     }
 }
