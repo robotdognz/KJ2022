@@ -96,6 +96,7 @@ namespace Together.Actors
         public GameObject SharedLayerRef;
         public GameObject LightLayerRef;
         public GameObject DarkLayerRef;
+        [SerializeField] public Animator SplitSreenUI;
 
         // Check if player is grounded and return true
         private bool IsGrounded
@@ -126,16 +127,18 @@ namespace Together.Actors
 
         public void SplitPlayer(Collider2D Collider)
         {
-            bool WasPlayerUnsplit = false;
-
             if (Shadow.CharacterObject.gameObject.activeSelf == false)
             {
                 Shadow.CharacterObject.transform.position = Player.CharacterObject.transform.position;
                 Shadow.CharacterObject.velocity = Player.CharacterObject.velocity;
-                WasPlayerUnsplit = true;
             }
 
             Shadow.CharacterObject.gameObject.SetActive(true);
+        }
+
+        public void JoinPlayers()
+        {
+            Shadow.CharacterObject.gameObject.SetActive(false);
         }
 
         public void PickupObject(Character Char, Transform Obj)
@@ -195,7 +198,7 @@ namespace Together.Actors
                 {
                     Character.CharacterObject.velocity = new Vector2(Character.CharacterObject.velocity.x, 0);
                     Character.CharacterObject.AddForce(new Vector2(0, Character.InverseCharacter ? -JumpForce : JumpForce));
-                    ActivePlayer.GetComponentInChildren<Trigger>().TriggerState = false;
+                    // ActivePlayer.GetComponentInChildren<Trigger>().TriggerState = false;
                     Character.JumpCount--;
                 }
 
@@ -251,6 +254,9 @@ namespace Together.Actors
         private void Update()
         {
             int RemainingJumps = 0;
+
+            if (SplitSreenUI)
+                SplitSreenUI.SetBool("SplitScreen", Shadow.CharacterObject.gameObject.activeSelf);
 
             if (Shadow.CharacterObject.gameObject.activeSelf)
             {
