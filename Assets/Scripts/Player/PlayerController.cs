@@ -6,6 +6,7 @@ namespace Together.Actors
     [System.Serializable]
     public class Character
     {
+        public Vector2 StartPosition;
         public Rigidbody2D CharacterObject;
         public int JumpCount;
         public bool InverseCharacter = false;
@@ -81,6 +82,9 @@ namespace Together.Actors
             Instance = this;
             Player.CharacterObject.gravityScale = 1;
             Shadow.CharacterObject.gravityScale = -1;
+
+            Player.StartPosition = Player.CharacterObject.transform.position;
+            Shadow.StartPosition = Shadow.CharacterObject.transform.position;
         }
 
         private void MoveCharacter(Character Character, string HorizontalInput, string VerticalInput, string JumpInput)
@@ -111,6 +115,25 @@ namespace Together.Actors
             InactivePlayer.velocity = new Vector2(ActivePlayer.velocity.x, -ActivePlayer.velocity.y);
         }
 
+        public void ResetPlayer(int Target)
+        {
+            Target = Mathf.Clamp(Target, 0, 2);
+
+            switch (Target)
+            {
+                case 0:
+                    Player.CharacterObject.transform.position = Player.StartPosition;
+                    break;
+                case 1:
+                    Shadow.CharacterObject.transform.position = Shadow.StartPosition;
+                    break;
+                case 2:
+                    Player.CharacterObject.transform.position = Player.StartPosition;
+                    Shadow.CharacterObject.transform.position = Shadow.StartPosition;
+                    break;
+            }
+        }
+
         private void Update()
         {
             #region DebugBindings
@@ -130,6 +153,17 @@ namespace Together.Actors
 
                 InSync = !InSync;
             }
+
+            if (Input.GetKey(KeyCode.R))
+            {
+                if (Input.GetKeyDown(KeyCode.Alpha1))
+                    ResetPlayer(0);
+                else if (Input.GetKeyDown(KeyCode.Alpha2))
+                    ResetPlayer(1);
+                else if (Input.GetKeyDown(KeyCode.Alpha3))
+                    ResetPlayer(2);
+            }
+
             #endregion
 
             int RemainingJumps = 0;

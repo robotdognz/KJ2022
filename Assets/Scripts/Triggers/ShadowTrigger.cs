@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 namespace Together.Levels
 {
@@ -8,61 +9,70 @@ namespace Together.Levels
     {
         public int CasterAmount;
         public float ShadowDistance = 10;
+        public string TargetTag;
 
-        private Vector2[] HitPositions
+        private List<List<Vector2>> HitPositions
         {
             get
             {
+                List<List<Vector2>> Points = new List<List<Vector2>>();
+
                 int TotalPointsHittingPlayer1 = 0;
                 int TotalPointsHittingPlayer2 = 0;
 
-                List<Vector2> Points = new List<Vector2>();
-
-                float DegreesPerRay = 360f / CasterAmount;
-
-                for (int I = 0; I < CasterAmount; I++)
+                foreach (GameObject G in GameObject.FindGameObjectsWithTag("ShadowCaster"))
                 {
-                    RaycastHit2D[] Hits = {};
+                    Transform Trans = G.transform;
 
-                    Vector2 Dir = new Vector2(Mathf.Cos((DegreesPerRay * I) / (180 / Mathf.PI)), Mathf.Sin((DegreesPerRay * I) / (180 / Mathf.PI)));
-
-                    Vector2 ShortestPoint = Vector2.zero;
-                    RaycastHit2D ShortestHit = new RaycastHit2D();
-
-                    foreach (RaycastHit2D H in Physics2D.RaycastAll(transform.position, Dir, ShadowDistance))
+                    for (int I = 0; I < CasterAmount; I++)
                     {
-                        if (Vector2.Distance(H.point, transform.position) < Vector2.Distance(ShortestPoint, transform.position) || ShortestPoint == Vector2.zero)
+                        float Radians = ((360f / CasterAmount) * I) / (180 / Mathf.PI);
+                        Vector2 Direction = new Vector2(Mathf.Cos(Radians), Mathf.Sin(Radians));
+
+                        Vector2 ShortestPoint = Vector2.zero;
+                        RaycastHit2D ShortestHit = new RaycastHit2D();
+
+                        foreach (RaycastHit2D Hit in Physics2D.RaycastAll(Trans.position, Direction, ShadowDistance))
                         {
-                            ShortestPoint = H.point;
-                            ShortestHit = H;
-                        }
-                    }
-
-                    if (ShortestPoint != Vector2.zero)
-                        Points.Add(ShortestPoint);
-
-                    if (Application.isPlaying)
-                    {
-                        Actors.PlayerController P;
-
-                        if (P = ShortestHit.collider.GetComponentInParent<Actors.PlayerController>())
-                        {
-                            if (ShortestHit.rigidbody == Actors.PlayerController.ActivePlayer)
+                            if ((Hit.collider.GetComponent<ShadowCaster2D>() && Hit.collider.GetComponent<ShadowCaster2D>().castsShadows && Hit.collider.GetComponent<ShadowCaster2D>().enabled) || Hit.collider.tag == "Player")
                             {
-                                TotalPointsHittingPlayer1++;
-                            }
-                            else if (ShortestHit.rigidbody == Actors.PlayerController.InactivePlayer)
-                            {
-                                TotalPointsHittingPlayer2++;
+                                if (Vector2.Distance(Hit.point, Trans.position) < Vector2.Distance(ShortestPoint, Trans.position) || ShortestPoint == Vector2.zero)
+                                {
+                                    ShortestPoint = Hit.point;
+                                    ShortestHit = Hit;
+                                }
                             }
                         }
 
-                        Actors.PlayerController.Instance.m_ActiveCharacter.IsInLight = TotalPointsHittingPlayer1 > 0;
-                        Actors.PlayerController.Instance.m_InactiveCharacter.IsInLight = TotalPointsHittingPlayer2 > 0;
+                        if (ShortestPoint != Vector2.zero)
+                            Points.Add(new List<Vector2>() { Trans.position, ShortestPoint });
+
+                        if (Application.isPlaying && ShortestHit.collider)
+                        {
+                            Actors.PlayerController P;
+
+                            if (P = ShortestHit.collider.GetComponentInParent<Actors.PlayerController>())
+                            {
+                                if (ShortestHit.rigidbody == P.m_ActiveCharacter.CharacterObject)
+                                {
+                                    TotalPointsHittingPlayer1++;
+                                }
+                                else if (ShortestHit.rigidbody == P.m_InactiveCharacter.CharacterObject)
+                                {
+                                    TotalPointsHittingPlayer2++;
+                                }
+                            }
+                        }
                     }
                 }
 
-                return Points.ToArray();
+                if (Application.isPlaying)
+                {
+                    Actors.PlayerController.Instance.m_ActiveCharacter.IsInLight = TotalPointsHittingPlayer1 > 0;
+                    Actors.PlayerController.Instance.m_InactiveCharacter.IsInLight = TotalPointsHittingPlayer2 > 0;
+                }
+
+                return Points;
             }
         }
 
@@ -73,23 +83,23 @@ namespace Together.Levels
 
         private void OnDrawGizmos()
         {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(transform.position, ShadowDistance);
+            foreach (List<Vector2> Point in HitPositions)
+            {
+                Gizmos.color = Color.red;
+                Draw2DRay(Point[0], Point[1]);
+
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireSphere(transform.position, ShadowDistance);
+            }
         }
 
         private void OnDrawGizmosSelected()
         {
-            Gizmos.color = Color.red;
-
-            foreach (Vector2 Point in HitPositions)
-            {
-                Draw2DRay(transform.position, Point);
-            }
         }
 
         private void Update()
         {
-            Vector2[] Points = HitPositions;
+            List<List<Vector2>> Points = HitPositions;
         }
     }
 }

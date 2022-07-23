@@ -26,7 +26,7 @@ namespace Together.Levels
 
             if (AttachedLight)
             {
-                AttachedLight.intensity = Mathf.MoveTowards(AttachedLight.intensity, 0, Time.deltaTime * LightTransitionSpeed);
+                AttachedLight.intensity = Mathf.MoveTowards(AttachedLight.intensity, 0.1f, Time.deltaTime * LightTransitionSpeed);
             }
         }
 
