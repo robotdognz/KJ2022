@@ -21,4 +21,9 @@ public class Pause : MonoBehaviour
     {
         Debug.Log("Test");
     }
+
+    public void TestAgain()
+    {
+        Debug.Log("Test again");
+    }
 }
