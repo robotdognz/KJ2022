@@ -111,8 +111,8 @@ namespace Together.Actors
 
         public void SynchronizePlayerLocations()
         {
-            InactivePlayer.transform.position = new Vector3(ActivePlayer.transform.position.x, -ActivePlayer.transform.position.y, InactivePlayer.transform.position.z);
-            InactivePlayer.velocity = new Vector2(ActivePlayer.velocity.x, -ActivePlayer.velocity.y);
+            InactivePlayer.transform.position = new Vector3(ActivePlayer.transform.position.x, ActivePlayer.transform.position.y * (m_InactiveCharacter.InverseCharacter ? -1 : 1), InactivePlayer.transform.position.z);
+            InactivePlayer.velocity = new Vector2(ActivePlayer.velocity.x, ActivePlayer.velocity.y * (m_InactiveCharacter.InverseCharacter ? -1 : 1));
         }
 
         public void ResetPlayer(int Target)
