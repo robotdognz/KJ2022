@@ -365,6 +365,7 @@ namespace Together.Actors
             }
             else
             {
+                Player.CharacterObject.constraints = RigidbodyConstraints2D.FreezeRotation;
                 Player.CharacterObject.GetComponent<Animator>().speed = 1;
                 MoveCharacter(Player, "Horizontal", "Vertical", "Jump", "Grab");
             }
