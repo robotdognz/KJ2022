@@ -35,7 +35,22 @@ public class Door : MonoBehaviour
         doorY = doorBody.gameObject.transform.position.y;
     }
 
-    public void DoDoor()
+    // public void DoDoor()
+    // {
+    //     switch (currentDoorState)
+    //     {
+    //         case DoorState.Closed:
+    //         case DoorState.Closing:
+    //             currentDoorState = DoorState.Opening;
+    //             break;
+    //         case DoorState.Opened:
+    //         case DoorState.Opening:
+    //             currentDoorState = DoorState.Closing;
+    //             break;
+    //     }
+    // }
+
+    public void OpenDoor()
     {
         switch (currentDoorState)
         {
@@ -43,6 +58,13 @@ public class Door : MonoBehaviour
             case DoorState.Closing:
                 currentDoorState = DoorState.Opening;
                 break;
+        }
+    }
+
+    public void CloseDoor()
+    {
+        switch (currentDoorState)
+        {
             case DoorState.Opened:
             case DoorState.Opening:
                 currentDoorState = DoorState.Closing;
