@@ -148,6 +148,8 @@ namespace Together.Actors
                     Obj.transform.localPosition = Vector3.zero;
 
                     Char.GrabbedObjectThisFrame = true;
+
+                    Char.LookingGrabbable = null;
                 }
             }
         }
@@ -162,8 +164,9 @@ namespace Together.Actors
                 Transform GrabbedObject = Char.GrabbedObject.transform;
                 GrabbedObject.parent = null;
 
-                if (GrabbedObject.GetComponent<Rigidbody2D>())
-                    GrabbedObject.GetComponent<Rigidbody2D>().AddForce(new Vector2(DropObjectForce.x * (Char.CharacterObject.GetComponent<SpriteRenderer>().flipX ? -1 : 1), DropObjectForce.y));
+                GrabbedObject.GetComponent<GrabbableObject>().DropCube(Char.CharacterObject.GetComponent<SpriteRenderer>().flipX ? -1 : 1, GrabbedObject.transform.position);
+
+                Char.LookingGrabbable = null;
             }
         }
 
@@ -191,7 +194,8 @@ namespace Together.Actors
                 }
                 else
                 {
-                    PickupObject(Character, Character.LookingGrabbable.transform);
+                    if (Character.LookingGrabbable)
+                        PickupObject(Character, Character.LookingGrabbable.transform);
                 }
                 DidMovementInput = true;
             }
