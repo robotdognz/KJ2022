@@ -6292,8 +6292,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e0079a79a4e14e46a1a0ebbb0204f8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CasterAmount: 360
+  CasterAmount: 180
   ShadowDistance: 15
+  LowPriorityFraction: 3
   TargetTag: ShadowCaster
   DisableRaycastGizmos: 0
   ShadowRecievers:

@@ -122,6 +122,7 @@ namespace Together.Actors
             {
                 Shadow.CharacterObject.transform.position = Player.CharacterObject.transform.position;
                 Shadow.CharacterObject.velocity = Player.CharacterObject.velocity;
+                Shadow.StartPosition = Shadow.CharacterObject.transform.position;
             }
 
             Shadow.CharacterObject.gameObject.SetActive(true);
