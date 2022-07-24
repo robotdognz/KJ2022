@@ -9,6 +9,6 @@ EditorBuildSettings:
     path: Assets/Scenes/00_TitleScreen.unity
     guid: c4027ddfe980f30488d5fc5e60ceecb0
   - enabled: 1
-    path: Assets/Scenes/CharacterTesting.unity
-    guid: bdbedf2020fb8bd49a6ee5a0c3a60c52
+    path: Assets/Scenes/Level_1.unity
+    guid: d159203f8605ab2458269b82cb7f2e9c
   m_configObjects: {}
