@@ -81,7 +81,7 @@ namespace Together.Actors
         #endregion
 
         public bool ActiveCharacter { get; private set; } = false; // Decides which actor is currently being controlled
-        private bool Multiplayer = false; // Use this when we implement multiplayer to disable the desaturation effect
+        public bool Multiplayer = false; // Use this when we implement multiplayer to disable the desaturation effect
 
         public Character Player, Shadow;
         private int Player1Jumps, Player2Jumps; // Scuffed? Yes but this will tell the game how many times a given player has jumped. Prevents a potential bug wher ea player could jump infinitely if they switch quick enough
@@ -131,19 +131,23 @@ namespace Together.Actors
         public void JoinPlayers()
         {
             Shadow.CharacterObject.gameObject.SetActive(false);
+            ActiveCharacter = false;
         }
 
         public void PickupObject(Character Char, Transform Obj)
         {
-            if (Char.GrabbedObject == null)
+            if (Char != null && Obj)
             {
-                if (Obj.GetComponent<Rigidbody2D>())
-                    Obj.GetComponent<Rigidbody2D>().simulated = false;
+                if (Char.GrabbedObject == null)
+                {
+                    if (Obj.GetComponent<Rigidbody2D>())
+                        Obj.GetComponent<Rigidbody2D>().simulated = false;
 
-                Obj.transform.parent = Char.PickupPos;
-                Obj.transform.localPosition = Vector3.zero;
+                    Obj.transform.parent = Char.PickupPos;
+                    Obj.transform.localPosition = Vector3.zero;
 
-                Char.GrabbedObjectThisFrame = true;
+                    Char.GrabbedObjectThisFrame = true;
+                }
             }
         }
 

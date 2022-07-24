@@ -17,7 +17,7 @@ public class GrabbableObject : MonoBehaviour
         if (Collision.GetComponentInParent<PlayerController>())
         {
             Character Char = PlayerController.GetCharacterByCollider(Collision);
-            if (Input.GetButtonDown(Char == PlayerController.Instance.Player ? "Grab" : "JoyGrab"))
+            if (Input.GetButtonDown(PlayerController.Instance.Multiplayer ? (Char == PlayerController.Instance.Player ? "Grab" : "JoyGrab") : "Grab"))
             {
                 if (Collision.gameObject.layer == gameObject.layer || LayerMask.LayerToName(gameObject.layer).ToLower().Contains("shared"))
                     PlayerController.Instance.PickupObject(Char, transform);
