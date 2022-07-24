@@ -77,20 +77,19 @@ public class SplitterTrigger : MonoBehaviour
 
         TargetTrigger.TriggerExitCol += (Collider2D Collider) =>
         {
-            if (!IsMerger)
-            {
-                Together.Actors.PlayerController PC;
+            Together.Actors.PlayerController PC;
 
-                if (PC = Collider.GetComponentInParent<Together.Actors.PlayerController>())
+            if (PC = Collider.GetComponentInParent<Together.Actors.PlayerController>())
+            {
+                if (Collider == PC.Player.CharacterObject.GetComponent<Collider2D>())
                 {
-                    if (Collider == PC.Player.CharacterObject.GetComponent<Collider2D>())
-                    {
-                        PC.Player.IsWaitingForSplit = false;
-                    }
-                    else if (Collider == PC.Shadow.CharacterObject.GetComponent<Collider2D>())
-                    {
-                        PC.Shadow.IsWaitingForSplit = false;
-                    }
+                    PC.Player.IsWaitingForSplit = false;
+                    HasPlayer1 = false;
+                }
+                else if (Collider == PC.Shadow.CharacterObject.GetComponent<Collider2D>())
+                {
+                    PC.Shadow.IsWaitingForSplit = false;
+                    HasPlayer2 = false;
                 }
             }
         };

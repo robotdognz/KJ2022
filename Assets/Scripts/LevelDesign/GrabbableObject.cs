@@ -16,10 +16,11 @@ public class GrabbableObject : MonoBehaviour
     {
         if (Collision.GetComponentInParent<PlayerController>())
         {
-            if (Input.GetButtonDown("Grab"))
+            Character Char = PlayerController.GetCharacterByCollider(Collision);
+            if (Input.GetButtonDown(Char == PlayerController.Instance.Player ? "Grab" : "JoyGrab"))
             {
                 if (Collision.gameObject.layer == gameObject.layer || LayerMask.LayerToName(gameObject.layer).ToLower().Contains("shared"))
-                    PlayerController.Instance.PickupObject(PlayerController.Instance.m_ActiveCharacter, transform);
+                    PlayerController.Instance.PickupObject(Char, transform);
             }
         }
     }

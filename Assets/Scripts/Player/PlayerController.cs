@@ -262,27 +262,46 @@ namespace Together.Actors
             if (SplitSreenUI)
                 SplitSreenUI.SetBool("SplitScreen", Shadow.CharacterObject.gameObject.activeSelf);
 
+            if (Input.GetKeyDown(KeyCode.JoystickButton7))
+            {
+                Multiplayer = !Multiplayer;
+            }
+
             if (Shadow.CharacterObject.gameObject.activeSelf)
             {
-                ActivePlayer.GetComponent<Animator>().speed = 1;
-                InactivePlayer.GetComponent<Animator>().speed = 0;
-
-                if (Input.GetKeyDown(KeyCode.Tab))
-                {
-                    ActiveCharacter = !ActiveCharacter;
-                }
-
                 if (!InSync)
                 {
-                    MoveCharacter(m_ActiveCharacter, "Horizontal", "Vertical", "Jump", "Grab");
+                    if (!Multiplayer)
+                    {
+                        if (Input.GetKeyDown(KeyCode.Tab))
+                        {
+                            ActiveCharacter = !ActiveCharacter;
+                        }
 
-                    if (ActiveCharacter)
-                        Player2Jumps = RemainingJumps;
+                        ActivePlayer.GetComponent<Animator>().speed = 1;
+                        InactivePlayer.GetComponent<Animator>().speed = 0;
+
+                        MoveCharacter(m_ActiveCharacter, "Horizontal", "Vertical", "Jump", "Grab");
+
+                        if (ActiveCharacter)
+                            Player2Jumps = RemainingJumps;
+                        else
+                            Player1Jumps = RemainingJumps;
+
+                        ActivePlayer.constraints = RigidbodyConstraints2D.FreezeRotation;
+                        InactivePlayer.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+                    }
                     else
-                        Player1Jumps = RemainingJumps;
+                    {
+                        ActivePlayer.GetComponent<Animator>().speed = 1;
+                        InactivePlayer.GetComponent<Animator>().speed = 1;
 
-                    ActivePlayer.constraints = RigidbodyConstraints2D.FreezeRotation;
-                    InactivePlayer.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
+                        MoveCharacter(Player, "Horizontal", "Vertical", "Jump", "Grab");
+                        MoveCharacter(Shadow, "JoyHorizontal", "JoyVertical", "JoyJump", "JoyGrab");
+
+                        Player.CharacterObject.constraints = RigidbodyConstraints2D.FreezeRotation;
+                        Shadow.CharacterObject.constraints = RigidbodyConstraints2D.FreezeRotation;
+                    }
 
                     #region Desaturation. DON'T LOOK AT ME!!!
                     if (!Multiplayer)
