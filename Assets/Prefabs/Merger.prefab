@@ -100,9 +100,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6624eac375bb6974488bc38d7cdec842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WaitLength: 1.5
   TargetTrigger: {fileID: 782929188139843168}
   IsMerger: 1
+  SplitEffect: {fileID: 1432375093316904299, guid: 98f9562e54c12b846b8aab7d6915a10b, type: 3}
   HasPlayer1: 0
   HasPlayer2: 0
   OnMergePlayer:

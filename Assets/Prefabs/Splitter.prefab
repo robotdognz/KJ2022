@@ -27,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5886251863496247459}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.25, y: -1.25, z: 0}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.6666667, y: 0.6666667, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5886251864580520870}
@@ -140,9 +140,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6624eac375bb6974488bc38d7cdec842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WaitLength: 1.5
   TargetTrigger: {fileID: 5886251864231809917}
   IsMerger: 0
+  SplitEffect: {fileID: 1432375093316904299, guid: be6f8aa4b0009ec46b55684f1221b877, type: 3}
   HasPlayer1: 0
   HasPlayer2: 0
   OnMergePlayer:

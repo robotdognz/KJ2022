@@ -6,9 +6,11 @@ using UnityEngine.Events;
 public class SplitterTrigger : MonoBehaviour
 {
     private bool DoneSplit = false;
-    public float WaitLength = 3;
+    // public float WaitLength = 3;
     public Trigger TargetTrigger;
     public bool IsMerger;
+
+    public GameObject SplitEffect;
 
     public bool HasPlayer1;
     public bool HasPlayer2;
@@ -25,15 +27,10 @@ public class SplitterTrigger : MonoBehaviour
             {
                 if (PC = Collider.GetComponentInParent<Together.Actors.PlayerController>())
                 {
-                    if (Collider == PC.Player.CharacterObject.GetComponent<Collider2D>())
+                    if (!PC.Shadow.CharacterObject.gameObject.activeSelf)
                     {
-                        PC.Player.IsWaitingForSplit = true;
-                        PC.Player.WaitTime = WaitLength;
-                    }
-                    else if (Collider == PC.Shadow.CharacterObject.GetComponent<Collider2D>())
-                    {
-                        PC.Shadow.IsWaitingForSplit = true;
-                        PC.Shadow.WaitTime = WaitLength;
+                        PC.SplitPlayer(Collider);
+                        Instantiate(SplitEffect, Collider.transform.position, Quaternion.identity);
                     }
                 }
                 else
@@ -50,6 +47,8 @@ public class SplitterTrigger : MonoBehaviour
 
                             LightBox.GetComponent<Rigidbody2D>().velocity = Collider.attachedRigidbody.velocity;
                             DarkBox.GetComponent<Rigidbody2D>().velocity = Collider.attachedRigidbody.velocity;
+
+                            Instantiate(SplitEffect, Collider.transform.position, Quaternion.identity);
 
                             Destroy(Collider.gameObject);
                         }
@@ -68,12 +67,13 @@ public class SplitterTrigger : MonoBehaviour
                     {
                         HasPlayer2 = true;
                     }
-                }
 
-                if (HasPlayer1 && HasPlayer2)
-                {
-                    Together.Actors.PlayerController.Instance.JoinPlayers();
-                    OnMergePlayer.Invoke();
+                    if (HasPlayer1 && HasPlayer2)
+                    {
+                        Together.Actors.PlayerController.Instance.JoinPlayers();
+                        OnMergePlayer.Invoke();
+                        Instantiate(SplitEffect, PC.Player.CharacterObject.transform.position, Quaternion.identity);
+                    }
                 }
             }
         };
