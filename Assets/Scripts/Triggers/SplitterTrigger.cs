@@ -31,6 +31,14 @@ public class SplitterTrigger : MonoBehaviour
                     {
                         PC.SplitPlayer(Collider);
                         Instantiate(SplitEffect, Collider.transform.position, Quaternion.identity);
+                        PC.Shadow.StartPosition = Collider.transform.position;
+                    }
+                    else
+                    {
+                        if (PC.m_ActiveCharacter == PC.Shadow)
+                        {
+                            PC.Shadow.StartPosition = PC.Shadow.CharacterObject.position;
+                        }
                     }
                 }
                 else

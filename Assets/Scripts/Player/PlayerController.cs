@@ -362,8 +362,8 @@ namespace Together.Actors
                 if (Shadow.ShadowDeathTimer <= 0 || Shadow.ShadowDeathTimer <= 0)
                 {
                     Shadow.ShadowDeathTimer = 1;
-                    Shadow.CharacterObject.transform.position = Player.CharacterObject.transform.position;
-                    Shadow.CharacterObject.velocity = Player.CharacterObject.velocity;
+                    Shadow.CharacterObject.transform.position = Shadow.StartPosition;
+                    Shadow.CharacterObject.velocity = Vector2.zero;
                 }
                 #endregion
             }
