@@ -17,11 +17,20 @@ public class GrabbableObject : MonoBehaviour
         if (Collision.GetComponentInParent<PlayerController>())
         {
             Character Char = PlayerController.GetCharacterByCollider(Collision);
-            if (Input.GetButtonDown(PlayerController.Instance.Multiplayer ? (Char == PlayerController.Instance.Player ? "Grab" : "JoyGrab") : "Grab"))
-            {
-                if (Collision.gameObject.layer == gameObject.layer || LayerMask.LayerToName(gameObject.layer).ToLower().Contains("shared"))
-                    PlayerController.Instance.PickupObject(Char, transform);
-            }
+
+            if (Char != null && Char.CharacterObject.gameObject.layer == Collision.gameObject.layer || LayerMask.LayerToName(Collision.gameObject.layer).ToLower().Contains("shared"))
+                Char.LookingGrabbable = gameObject;
+        }
+    }
+
+    private void TriggerExit(Collider2D Collision)
+    {
+        if (Collision.GetComponentInParent<PlayerController>())
+        {
+            Character Char = PlayerController.GetCharacterByCollider(Collision);
+
+            if (Char != null && Char.CharacterObject.gameObject.layer == Collision.gameObject.layer || LayerMask.LayerToName(Collision.gameObject.layer).ToLower().Contains("shared"))
+                Char.LookingGrabbable = null;
         }
     }
 }

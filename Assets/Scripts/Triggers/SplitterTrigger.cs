@@ -48,6 +48,9 @@ public class SplitterTrigger : MonoBehaviour
                             LightBox.layer = Together.Actors.PlayerController.Instance.LightLayerRef.layer;
                             DarkBox.layer = Together.Actors.PlayerController.Instance.DarkLayerRef.layer;
 
+                            LightBox.GetComponent<Rigidbody2D>().velocity = Collider.attachedRigidbody.velocity;
+                            DarkBox.GetComponent<Rigidbody2D>().velocity = Collider.attachedRigidbody.velocity;
+
                             Destroy(Collider.gameObject);
                         }
                     }

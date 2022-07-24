@@ -19,6 +19,7 @@ namespace Together.Actors
         public bool IsWaitingForSplit;
         public float WaitTime;
         public float CurrentWait;
+        public GameObject LookingGrabbable;
 
         public float ShadowDeathTimer
         {
@@ -182,9 +183,16 @@ namespace Together.Actors
             if (IsGrounded(Character))
                 Character.JumpCount = JumpCount;
 
-            if (Input.GetButtonDown(GrabInput) && Character.GrabbedObject != null)
+            if (Input.GetButtonDown(GrabInput))
             {
-                DropObject(Character);
+                if (Character.GrabbedObject)
+                {
+                    DropObject(Character);
+                }
+                else
+                {
+                    PickupObject(Character, Character.LookingGrabbable.transform);
+                }
                 DidMovementInput = true;
             }
 

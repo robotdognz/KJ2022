@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6231212785790502916}
   - component: {fileID: 4168321748905263756}
   - component: {fileID: 8924061233907852913}
+  - component: {fileID: 3180338427491396669}
   m_Layer: 0
   m_Name: Wall (1)
   m_TagString: Untagged
@@ -53,7 +54,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -111,7 +112,33 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 138958
+  m_InstanceId: 145914
+--- !u!61 &3180338427491396669
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 108671566548975579}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &1888171616005747083
 GameObject:
   m_ObjectHideFlags: 0
@@ -123,6 +150,7 @@ GameObject:
   - component: {fileID: 7470109186292425103}
   - component: {fileID: 4127557113367911128}
   - component: {fileID: 609355990634131323}
+  - component: {fileID: 792389538533505357}
   m_Layer: 0
   m_Name: Roof
   m_TagString: Untagged
@@ -165,7 +193,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -223,7 +251,33 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 138902
+  m_InstanceId: 145858
+--- !u!61 &792389538533505357
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1888171616005747083}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &3177719846325157636
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,6 +289,7 @@ GameObject:
   - component: {fileID: 4322481297491892196}
   - component: {fileID: 5585957216934300565}
   - component: {fileID: 374184518917649260}
+  - component: {fileID: 8014808911298007686}
   m_Layer: 0
   m_Name: Wall (2)
   m_TagString: Untagged
@@ -277,7 +332,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -335,7 +390,33 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 138898
+  m_InstanceId: 145854
+--- !u!61 &8014808911298007686
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3177719846325157636}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &3950987658743005291
 GameObject:
   m_ObjectHideFlags: 0
@@ -347,6 +428,7 @@ GameObject:
   - component: {fileID: 832658270626922115}
   - component: {fileID: 835199849581602775}
   - component: {fileID: 3883386105141797041}
+  - component: {fileID: 763261206049671302}
   m_Layer: 0
   m_Name: Floor
   m_TagString: Untagged
@@ -389,7 +471,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -447,7 +529,33 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 138926
+  m_InstanceId: 145882
+--- !u!61 &763261206049671302
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3950987658743005291}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &8413362532206197590
 GameObject:
   m_ObjectHideFlags: 0
@@ -494,6 +602,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8062085337555382765}
     m_Modifications:
+    - target: {fileID: 741720888, guid: 9491ae778fb1cb747bd826b15182d933, type: 3}
+      propertyPath: m_InstanceId
+      value: -682048
+      objectReference: {fileID: 0}
     - target: {fileID: 5711447805278698394, guid: 9491ae778fb1cb747bd826b15182d933, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.5
@@ -591,7 +703,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 138908
+  m_InstanceId: 145864
 --- !u!4 &3111564308903997130 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5711447806282805245, guid: 9491ae778fb1cb747bd826b15182d933, type: 3}
@@ -615,6 +727,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8062085337555382765}
     m_Modifications:
+    - target: {fileID: 741720888, guid: 9491ae778fb1cb747bd826b15182d933, type: 3}
+      propertyPath: m_InstanceId
+      value: -682060
+      objectReference: {fileID: 0}
     - target: {fileID: 5711447805278698394, guid: 9491ae778fb1cb747bd826b15182d933, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.5
@@ -728,7 +844,7 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 138900
+  m_InstanceId: 145856
 --- !u!1001 &7838522393116121202
 PrefabInstance:
   m_ObjectHideFlags: 0
