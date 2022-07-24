@@ -32,23 +32,9 @@ public class Door : MonoBehaviour
     private void Start()
     {
         doorHeight = doorBody.gameObject.transform.localScale.y;
-        doorY = doorBody.gameObject.transform.position.y;
+        // doorY = doorBody.gameObject.transform.position.y;
+        doorY = doorBody.gameObject.transform.localPosition.y;
     }
-
-    // public void DoDoor()
-    // {
-    //     switch (currentDoorState)
-    //     {
-    //         case DoorState.Closed:
-    //         case DoorState.Closing:
-    //             currentDoorState = DoorState.Opening;
-    //             break;
-    //         case DoorState.Opened:
-    //         case DoorState.Opening:
-    //             currentDoorState = DoorState.Closing;
-    //             break;
-    //     }
-    // }
 
     public void OpenDoor()
     {
@@ -80,9 +66,13 @@ public class Door : MonoBehaviour
                 switch (doorType)
                 {
                     case DoorType.Up:
-                        if (doorBody.transform.position.y > doorY)
+                        if (doorBody.transform.localPosition.y > doorY)
                         {
-                            doorBody.MovePosition(doorBody.position + new Vector2(0, -doorSpeed * Time.fixedDeltaTime));
+                            // doorBody.MovePosition(doorBody.transform.localPosition + new Vector3(0, -doorSpeed * Time.fixedDeltaTime));
+
+                            Vector3 newPosition = new Vector3(doorBody.position.x, doorBody.position.y) + transform.TransformDirection(new Vector3(0, -doorSpeed * Time.fixedDeltaTime));
+                            doorBody.MovePosition(newPosition);
+
                         }
                         else
                         {
@@ -90,9 +80,12 @@ public class Door : MonoBehaviour
                         }
                         break;
                     case DoorType.Down:
-                        if (doorBody.transform.position.y < doorY)
+                        if (doorBody.transform.localPosition.y < doorY)
                         {
-                            doorBody.MovePosition(doorBody.position + new Vector2(0, doorSpeed * Time.fixedDeltaTime));
+                            // doorBody.MovePosition(doorBody.transform.localPosition + new Vector3(0, doorSpeed * Time.fixedDeltaTime));
+
+                            Vector3 newPosition = new Vector3(doorBody.position.x, doorBody.position.y) + transform.TransformDirection(new Vector3(0, doorSpeed * Time.fixedDeltaTime));
+                            doorBody.MovePosition(newPosition);
                         }
                         else
                         {
@@ -105,9 +98,12 @@ public class Door : MonoBehaviour
                 switch (doorType)
                 {
                     case DoorType.Up:
-                        if (doorBody.transform.position.y < doorY + doorHeight)
+                        if (doorBody.transform.localPosition.y < doorY + doorHeight)
                         {
-                            doorBody.MovePosition(doorBody.position + new Vector2(0, doorSpeed * Time.fixedDeltaTime));
+                            // doorBody.MovePosition(doorBody.transform.localPosition + new Vector3(0, doorSpeed * Time.fixedDeltaTime));
+
+                            Vector3 newPosition = new Vector3(doorBody.position.x, doorBody.position.y) + transform.TransformDirection(new Vector3(0, doorSpeed * Time.fixedDeltaTime));
+                            doorBody.MovePosition(newPosition);
                         }
                         else
                         {
@@ -115,9 +111,12 @@ public class Door : MonoBehaviour
                         }
                         break;
                     case DoorType.Down:
-                        if (doorBody.transform.position.y > doorY - doorHeight)
+                        if (doorBody.transform.localPosition.y > doorY - doorHeight)
                         {
-                            doorBody.MovePosition(doorBody.position + new Vector2(0, -doorSpeed * Time.fixedDeltaTime));
+                            // doorBody.MovePosition(doorBody.transform.localPosition + new Vector3(0, -doorSpeed * Time.fixedDeltaTime));
+
+                            Vector3 newPosition = new Vector3(doorBody.position.x, doorBody.position.y) + transform.TransformDirection(new Vector3(0, -doorSpeed * Time.fixedDeltaTime));
+                            doorBody.MovePosition(newPosition);
                         }
                         else
                         {
