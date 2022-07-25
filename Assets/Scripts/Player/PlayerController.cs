@@ -70,6 +70,14 @@ namespace Together.Actors
 
             return null;
         }
+
+        public static bool PlayShadowMusic
+        {
+            get
+            {
+                return Instance.ActiveCharacter && !Instance.Multiplayer;
+            }
+        }
         #endregion
 
         #region Non-Static Hooks

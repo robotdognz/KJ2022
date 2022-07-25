@@ -60,8 +60,8 @@ Material:
     m_Floats:
     - _DarkWorld: 1
     - _DarkWorldAnimationSpeed: 0.1
-    - _DarkWorldSaturation: 0.25
-    - _DarkworldContrast: 1
+    - _DarkWorldSaturation: 0.15
+    - _DarkworldContrast: 1.1
     - _DeathVignetteOpacity: 0
     - _EnableExternalAlpha: 0
     - _GhostImageOpacity: 0
@@ -71,7 +71,7 @@ Material:
     - _WorbleScale: 5
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _DarkWorldTint: {r: 0.20754719, g: 0.20754719, b: 0.20754719, a: 1}
+    - _DarkWorldTint: {r: 0.4433962, g: 0.4433962, b: 0.4433962, a: 1}
     - _DeathvignetteColour: {r: 0.7075472, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
