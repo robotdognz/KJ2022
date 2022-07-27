@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5711447805278698397}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.21, y: 1.48, z: 0.08582266}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.6, y: 4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -108,7 +108,7 @@ MonoBehaviour:
   - {x: 0.5000005, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 170114
+  m_InstanceId: 48730
 --- !u!1 &5711447806282805247
 GameObject:
   m_ObjectHideFlags: 0
@@ -155,7 +155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorBody: {fileID: 5711447805278698395}
-  doorSpeed: 3
+  doorSpeed: 20
   doorType: 0
   currentDoorState: 0
 --- !u!1 &6123941849280678900
@@ -184,7 +184,7 @@ Transform:
   m_GameObject: {fileID: 6123941849280678900}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.1068666, y: 0.16603, z: 0.66412}
+  m_LocalScale: {x: 1.1068666, y: 0.153, z: 0.66412}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5711447805278698394}
