@@ -108,7 +108,7 @@ MonoBehaviour:
   - {x: 0.5000005, y: -0.5, z: 0}
   m_ShapePathHash: 0
   m_Mesh: {fileID: 0}
-  m_InstanceId: 48730
+  m_InstanceId: 63798
 --- !u!1 &5711447806282805247
 GameObject:
   m_ObjectHideFlags: 0
@@ -155,7 +155,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorBody: {fileID: 5711447805278698395}
-  doorSpeed: 20
+  doorSpeed: 40
+  movementAmount: 0.8
   doorType: 0
   currentDoorState: 0
 --- !u!1 &6123941849280678900
