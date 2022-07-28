@@ -6,6 +6,7 @@ public class MenuLogic : MonoBehaviour
 {
     public void StartGame()
     {
+        Time.timeScale = 1;
         UnityEngine.SceneManagement.SceneManager.LoadScene(1);
     }
 
