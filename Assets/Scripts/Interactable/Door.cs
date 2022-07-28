@@ -103,7 +103,7 @@ public class Door : MonoBehaviour
                         if (doorBody.transform.localPosition.y < doorLocalY + doorHeight * movementAmount)
                         {
                             Vector3 newPosition = new Vector3(doorBody.position.x, doorBody.position.y) + transform.TransformDirection(new Vector3(0, doorSpeed * Time.fixedDeltaTime));
-                            newPosition.y = Mathf.Min(newPosition.y, doorGlobalY + doorHeight);
+                            newPosition.y = Mathf.Min(newPosition.y, doorGlobalY + doorHeight * movementAmount);
                             doorBody.MovePosition(newPosition);
                         }
                         else
@@ -115,7 +115,7 @@ public class Door : MonoBehaviour
                         if (doorBody.transform.localPosition.y > doorLocalY - doorHeight * movementAmount)
                         {
                             Vector3 newPosition = new Vector3(doorBody.position.x, doorBody.position.y) + transform.TransformDirection(new Vector3(0, -doorSpeed * Time.fixedDeltaTime));
-                            newPosition.y = Mathf.Max(newPosition.y, doorGlobalY - doorHeight);
+                            newPosition.y = Mathf.Max(newPosition.y, doorGlobalY - doorHeight * movementAmount);
                             doorBody.MovePosition(newPosition);
                         }
                         else

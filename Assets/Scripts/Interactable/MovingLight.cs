@@ -12,7 +12,7 @@ public class MovingLight : MonoBehaviour
     public float moveSpeed = 1;
 
 
-    public bool testMePlease = false;
+    // public bool testMePlease = false;
 
     private Vector3 currentPosition;
 
@@ -50,6 +50,7 @@ public class MovingLight : MonoBehaviour
         }
     }
 
+    [ContextMenu("Test Movement")]
     public void DoMove()
     {
         switch (moveState)
@@ -66,11 +67,11 @@ public class MovingLight : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (testMePlease)
-        {
-            testMePlease = false;
-            DoMove();
-        }
+        // if (testMePlease)
+        // {
+        //     testMePlease = false;
+        //     DoMove();
+        // }
 
         Vector3 targetPosition = points[pointsIndex].transform.position;
         float delta = moveSpeed * Time.deltaTime;

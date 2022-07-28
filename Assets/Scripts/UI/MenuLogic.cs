@@ -20,6 +20,18 @@ public class MenuLogic : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 
+    public void TitleScreenDelayed()
+    {
+        StartCoroutine(TitleScreenEnumerator());
+    }
+
+    private IEnumerator TitleScreenEnumerator()
+    {
+        yield return new WaitForSeconds(0.5f);
+        TitleScreen();
+    }
+
+
     public void PauseGame()
     {
         Time.timeScale = 0;
